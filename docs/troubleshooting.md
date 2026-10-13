@@ -1,13 +1,13 @@
 # Troubleshooting the first 10 minutes
 
 This page covers the problems most people hit immediately after installing
-Squidbrake. If a command still behaves unexpectedly, run ``squidbrake doctor``
+Squidbrake. If a command still behaves unexpectedly, run `squidbrake doctor`
 and keep its output when asking for help.
 
 ## `squidbrake` is not found after installation
 
 **Symptom:** The installer finishes, but a new terminal says that
-``squidbrake`` is not recognized (Windows) or cannot be found (macOS/Linux).
+`squidbrake` is not recognized (Windows) or cannot be found (macOS/Linux).
 
 **Why it happens:** The installer or `pipx` added the executable to a Scripts
 or bin directory that the current terminal has not reloaded yet.
@@ -51,13 +51,15 @@ squidbrake setup --port 8090
 Use the same port when checking the service or connecting agents. Setup also
 prints the gateway URL it configured.
 
-## Actions say “Squidbrake isn't running”
+## Actions are blocked: “Squidbrake at ... is unreachable”
 
-**Symptom:** An agent refuses an action with a message that Squidbrake is not
-running.
+**Symptom:** An agent refuses an action with a message such as
+“Squidbrake at http://127.0.0.1:8080 is unreachable or misconfigured (...)”.
 
 **Why it happens:** Hooks fail closed when the local gateway is unavailable;
-the agent action is blocked instead of bypassing the policy.
+the agent action is blocked instead of bypassing the policy. Since 0.9, a rule
+can set `when_unreachable: allow` for its actions, so those actions may still
+run while the gateway is down; everything else remains blocked.
 
 **Fix:** Check the gateway first:
 
@@ -141,6 +143,9 @@ squidbrake connect agents --agent codex --remove
 
 Replace `codex` with `cursor`, `gemini-cli`, `vscode`, or `antigravity` as
 needed. For Claude Code, use `squidbrake connect claude-code --remove`.
+
+When the gateway is running on that computer, an administrator can also turn
+off an individual agent from its switch in the dashboard's **Settings**.
 
 To remove all connections installed by Squidbrake:
 
